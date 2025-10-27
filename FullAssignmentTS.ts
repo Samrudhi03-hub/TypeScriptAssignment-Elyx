@@ -20,7 +20,6 @@ function findMissingDigit(expression: string): void {
   }
 }
 
-// Example test
 findMissingDigit("4? + 12 = 58");
 
 // 1.2 Print the Number Pattern (Without Loops)
@@ -48,7 +47,7 @@ function buildRow(i: number, j: number = i, direction: "down" | "up" = "down"): 
 console.log("Pattern for n = 5:");
 printPattern(5);
 
-// 1.3. Find the Nth Digit in a Number Sequence
+// // 1.3. Find the Nth Digit in a Number Sequence
 
 function findNthDigit(N : number) {  //N= 11
   let sequence : String = "1234567891011";
@@ -58,7 +57,7 @@ function findNthDigit(N : number) {  //N= 11
 
 findNthDigit(11);
 
-// 1.4. Check If a Number is a Power of 4
+// // 1.4. Check If a Number is a Power of 4
 
 function isPowerOfFour(n: number) {
   if (n <= 0) return false;
@@ -72,7 +71,7 @@ function isPowerOfFour(n: number) {
 console.log(isPowerOfFour(64)); // true
 console.log(isPowerOfFour(8));  // false
 
-// 1.5. Find the Single Non-Repeating Number
+// // 1.5. Find the Single Non-Repeating Number
 
 function findSingleNumber(arr: number[]): void {
   let result: number = 0;
@@ -86,58 +85,136 @@ function findSingleNumber(arr: number[]): void {
 
 findSingleNumber([4, 3, 2, 4, 1, 3, 2]);
 
-// 2. OOP-Based Interactive Programming Problems
+// // 2. OOP-Based Interactive Programming Problems
 
-// 2.1 Bank Application
+// // 2.1 Bank Application
 
 class Account {
   private name: string;
   private balance: number;
-  private transactions: string[] = [];
+  private transactions: string[];
 
-  constructor(name: string, initialAmount: number = 0) {
+  constructor(name: string, initialDeposit: number = 0) {
     this.name = name;
-    this.balance = initialAmount;
-    this.transactions.push(`Account created with Rs${initialAmount}`);
-  }
-
-  deposit(amount: number): void {
-    this.balance += amount;
-    this.transactions.push(`Deposited Rs${amount}`);
-    console.log(`Rs${amount} deposited successfully.`);
-  }
-
-  withdraw(amount: number): void {
-    if (amount > this.balance) {
-      console.log("Insufficient funds");
-      return;
-    }
-    this.balance -= amount;
-    this.transactions.push(`Withdrawn Rs${amount}`);
-    console.log(`Rs${amount} withdrawn successfully.`);
-  }
-
-  showBalance(): void {
-    console.log(`${this.name}'s balance is Rs${this.balance}`);
-  }
-
-  showTransactions(): void {
-    console.log(`Transaction history for ${this.name} is: `);
-    for (let t of this.transactions) {
-      console.log(". " + t);
-    }
+    this.balance = initialDeposit;
+    this.transactions = [`Account created with the amount Rs${initialDeposit}`];
   }
 
   getName(): string {
     return this.name;
   }
+
+  deposit(amount: number): void {
+    if (amount > 0) {
+      this.balance += amount;
+      this.transactions.push(`Deposited Rs${amount}`);
+      console.log(`${amount} deposited to ${this.name}'s account`);
+    } else {
+      console.log("Enter valid amount");
+    }
+  }
+
+  withdraw(amount: number): void {
+    if (amount > this.balance) {
+      console.log("Insufficient funds");
+    } else if (amount > 0) {
+      this.balance -= amount;
+      this.transactions.push(`Withdrawn Rs${amount}`);
+      console.log(`${amount} withdrawn from ${this.name}'s account`);
+    } else {
+      console.log("Enter valid amount");
+    }
+  }
+
+  showBalance(): void {
+    console.log(`The balance of ${this.name}'s account is: Rs${this.balance}`);
+  }
+
+  showHistory(): void {
+    console.log(`The transaction history of ${this.name}'s account is:`);
+    this.transactions.forEach((t, i) => {
+      console.log(`${i + 1}. ${t}`);
+    });
+  }
 }
 
-let account1 = new Account("John Doe", 1000);
-account1.deposit(500);
-account1.withdraw(200);
-account1.showBalance();
-account1.showTransactions();
+class Bank {
+  private accounts: Account[];
+
+  constructor() {
+    this.accounts = [];
+  }
+
+  createAccount(name: string, amount: number): void {
+    const existing = this.accounts.find((acc) => acc.getName() === name);
+    if (existing) {
+      console.log("Account already exists");
+      return;
+    } else {
+      const account = new Account(name, amount);
+      this.accounts.push(account);
+      console.log(`Account created for ${name} with amount Rs${amount}`);
+    }
+  }
+
+  depositMoney(name: string, amount: number): void {
+    const acc = this.accounts.find((acc) => acc.getName() === name);
+    if (acc) {
+      acc.deposit(amount);
+    } else {
+      console.log("Account not found");
+    }
+  }
+
+  withdrawMoney(name: string, amount: number): void {
+    const acc = this.accounts.find((acc) => acc.getName() === name);
+    if (acc) {
+      acc.withdraw(amount);
+    } else {
+      console.log("Account not found");
+    }
+  }
+
+  showBalance(name: string): void {
+    const acc = this.accounts.find((acc) => acc.getName() === name);
+    if (acc) {
+      acc.showBalance();
+    } else {
+      console.log("Account not found");
+    }
+  }
+
+  showHistory(name: string): void {
+    const acc = this.accounts.find((acc) => acc.getName() === name);
+    if (acc) {
+      acc.showHistory();
+    } else {
+      console.log("Account not found");
+    }
+  }
+
+  searchAccount(name: string): void {
+    const acc = this.accounts.find((acc) => acc.getName() === name);
+    if (acc) {
+      console.log(`Account found with the name ${acc.getName()}`);
+    } else {
+      console.log("Account not found with that name");
+    }
+  }
+}
+
+const bank = new Bank();
+
+bank.createAccount("Samrudhi", 5000);
+bank.createAccount("Snehal", 10000);
+
+bank.depositMoney("Snehal", 2000);
+bank.withdrawMoney("Snehal", 2000);
+
+bank.showBalance("Snehal");
+bank.showHistory("Snehal");
+bank.searchAccount("Snehal");
+
 
 // 2.2. Calculator Application
 
@@ -209,109 +286,193 @@ calc1.calculate();
 // 2.3 Employee Payroll Management System
 
 class Employee {
-  private name: string;
-  private baseSalary: number;
-  private tax: number;
+  #name: string;
+  #baseSalary: number;
+  #tax: number;
 
   constructor(name: string, baseSalary: number, tax: number) {
-    this.name = name;
-    this.baseSalary = baseSalary;
-    this.tax = tax;
+    this.#name = name;
+    this.#baseSalary = baseSalary;
+    this.#tax = tax; // store tax rate (e.g. 0.1 for 10%)
   }
 
+  // get employee name (for searching)
+  getName(): string {
+    return this.#name;
+  }
+
+  // calculate salary after tax
   calculateNetSalary(): number {
-    if (!this.tax) {
-      console.log("Please enter valid tax percent in decimal!");
-      return this.baseSalary;
+    if (this.#tax <= 0 || this.#tax >= 1) {
+      console.log("Please enter valid tax percent in decimal (e.g. 0.1 for 10%)");
+      return this.#baseSalary;
     }
-    let taxableAmount = this.baseSalary * this.tax;
-    let net = this.baseSalary - taxableAmount;
-    return net;
+
+    const taxAmount = this.#baseSalary * this.#tax;
+    const netSalary = this.#baseSalary - taxAmount;
+    return netSalary;
   }
 
+  // show salary slip
   showSalarySlip(): void {
     console.log("------ Salary Slip ------");
-    console.log("Name:", this.name);
-    console.log("Base Salary:", this.baseSalary);
-    console.log("Tax:", this.baseSalary * this.tax);
-    console.log("Net Salary:", this.calculateNetSalary());
-  }
-
-  getName(): string {
-    return this.name;
+    console.log("Name:", this.#name);
+    console.log("Base Salary: Rs", this.#baseSalary);
+    console.log("Tax Deduction: Rs", this.#baseSalary * this.#tax);
+    console.log("Net Salary: Rs", this.calculateNetSalary());
   }
 }
 
-let emp1 = new Employee("Alice", 5000, 0.1);
-emp1.showSalarySlip();
+// Payroll Manager class to manage multiple employees
+class PayrollSystem {
+  private employees: Employee[];
+
+  constructor() {
+    this.employees = []; // store all Employee objects
+  }
+
+  // Add new employee
+  addEmployee(name: string, baseSalary: number, tax: number): void {
+    const newEmp = new Employee(name, baseSalary, tax);
+    this.employees.push(newEmp);
+    console.log(`Employee "${name}" added successfully.`);
+  }
+
+  // Calculate salary for an employee
+  calculateSalary(name: string): void {
+    const emp = this.employees.find((e) => e.getName() === name);
+    if (emp) {
+      const net = emp.calculateNetSalary();
+      console.log(`Net Salary for ${name}: Rs${net}`);
+    } else {
+      console.log(`No employee found with name "${name}".`);
+    }
+  }
+
+  // Show full salary slip
+  showSalarySlip(name: string): void {
+    const emp = this.employees.find((e) => e.getName() === name);
+    if (emp) {
+      emp.showSalarySlip();
+    } else {
+      console.log(`No employee found with name "${name}".`);
+    }
+  }
+
+  // Search employee by name
+  searchEmployee(name: string): void {
+    const emp = this.employees.find((e) => e.getName() === name);
+    if (emp) {
+      console.log(`Employee "${name}" exists in the system.`);
+    } else {
+      console.log(`No employee found with name "${name}".`);
+    }
+  }
+}
+
+const payroll = new PayrollSystem();
+
+// Add Employees
+payroll.addEmployee("Alice", 5000, 0.1);
+payroll.addEmployee("Bob", 7000, 0.15);
+
+// Calculate Salary
+payroll.calculateSalary("Alice");
+
+// Show Salary Slip
+payroll.showSalarySlip("Alice");
+
+// Search Employee
+payroll.searchEmployee("Bob");
+
 
 // 2.4. Library Management System
 
 class Book {
-  private title: string;
-  private isIssued: boolean;
+  // private fields
+  #title: string;
+  #isIssued: boolean;
 
   constructor(title: string) {
-    this.title = title;
-    this.isIssued = false;
-  }
-
-  issue(): void {
-    if (this.isIssued) {
-      console.log(`${this.title} is already issued.`);
-      return;
-    }
-    this.isIssued = true;
-    console.log(`${this.title} issued successfully.`);
-  }
-
-  returnBook(): void {
-    if (!this.isIssued) {
-      console.log(`${this.title} was not issued.`);
-      return;
-    }
-    this.isIssued = false;
-    console.log(`${this.title} returned successfully.`);
-  }
-
-  isAvailable(): boolean {
-    return !this.isIssued;
+    this.#title = title;   // store the title
+    this.#isIssued = false; // book is not issued when added
   }
 
   getTitle(): string {
-    return this.title;
+    return this.#title; // give book title when asked
+  }
+
+  isAvailable(): boolean {
+    // true if book not issued
+    return !this.#isIssued;
+  }
+
+  issue(): void {
+    if (this.#isIssued) {
+      console.log(`${this.#title} is already issued.`);
+    } else {
+      this.#isIssued = true;
+      console.log(`${this.#title} issued successfully.`);
+    }
+  }
+
+  returnBook(): void {
+    if (!this.#isIssued) {
+      console.log(`${this.#title} was not issued.`);
+    } else {
+      this.#isIssued = false;
+      console.log(`${this.#title} returned successfully.`);
+    }
   }
 }
 
 class Library {
-  private books: Book[] = [];
+  private books: Book[];
+
+  constructor() {
+    this.books = []; // array to store all book objects
+  }
 
   addBook(title: string): void {
-    this.books.push(new Book(title));
-    console.log(`Added book ${title}`);
+    const newBook = new Book(title); // create new book
+    this.books.push(newBook); // add to library
+    console.log(`Book "${title}" added to library.`);
+  }
+
+  issueBook(title: string): void {
+    const found = this.books.find((book) => book.getTitle() === title);
+    if (found) {
+      found.issue();
+    } else {
+      console.log(`Book "${title}" not found.`);
+    }
+  }
+
+  returnBook(title: string): void {
+    const found = this.books.find((book) => book.getTitle() === title);
+    if (found) {
+      found.returnBook();
+    } else {
+      console.log(`Book "${title}" not found.`);
+    }
   }
 
   showAvailableBooks(): void {
     console.log("Available Books:");
-    this.books.filter(book => book.isAvailable())
-      .forEach(book => console.log("• " + book.getTitle()));
+    for (const book of this.books) {
+      if (book.isAvailable()) {
+        console.log("• " + book.getTitle());
+      }
+    }
   }
 
   searchBook(title: string): void {
-    let book = this.books.find(b => b.getTitle() === title);
-    console.log(book ? `${title} found` : `No book named ${title}`);
-  }
-
-  issueBook(title: string): void {
-    let book = this.books.find(b => b.getTitle() === title);
-    if (book) book.issue();
-    else console.log(`No such book found.`);
-  }
-
-  returnBook(title: string): void {
-    let book = this.books.find(b => b.getTitle() === title);
-    if (book) book.returnBook();
-    else console.log(`No such book found.`);
+    const found = this.books.find((book) => book.getTitle() === title);
+    if (found) {
+      console.log(`"${title}" is present in the library.`);
+    } else {
+      console.log(`No book named "${title}" found.`);
+    }
   }
 }
 
@@ -323,68 +484,83 @@ library.returnBook("The Great Gatsby");
 library.showAvailableBooks();
 library.searchBook("1984");
 
-// 2.5. ATM Simulation
 
-interface Transaction {
-  type: string;
-  amount: number;
-  date: Date;
-}
+// 2.5. ATM Simulation
 
 class ATM {
   private pin: number;
   private balance: number;
-  private transactions: Transaction[] = [];
+  private transactions: string[];
 
   constructor(pin: number, initialBalance: number = 0) {
-    this.pin = pin;
-    this.balance = initialBalance;
+    this.pin = pin;                   // store the user's pin
+    this.balance = initialBalance;    
+    this.transactions = [];           
   }
 
+  // Check if entered pin matches stored pin
   authenticate(enteredPin: number): boolean {
-    return this.pin === enteredPin;
+    if (enteredPin === this.pin) {
+      console.log("PIN verified successfully!");
+      return true;
+    } else {
+      console.log("Invalid PIN!");
+      return false;
+    }
   }
 
   deposit(amount: number): void {
+    if (amount <= 0) {
+      console.log("Invalid amount!");
+      return;
+    }
     this.balance += amount;
-    this.transactions.push({ type: "Deposit", amount, date: new Date() });
-    console.log(`Deposited Rs${amount}`);
+    this.transactions.push(`Deposited Rs${amount}`);
+    console.log(`Deposited Rs${amount} successfully.`);
   }
 
   withdraw(amount: number): void {
-    if (amount > this.balance) {
-      console.log("Insufficient funds!");
+    if (amount <= 0) {
+      console.log("Invalid amount!");
       return;
     }
-    this.balance -= amount;
-    this.transactions.push({ type: "Withdraw", amount, date: new Date() });
-    console.log(`Withdrawn Rs${amount}`);
+
+    if (amount > this.balance) {
+      console.log("Insufficient balance!");
+      return;
+    }
+
+    this.balance -= amount; 
+    this.transactions.push(`Withdrawn Rs${amount}`);
+    console.log(`Withdrawn Rs${amount} successfully.`);
   }
+
 
   checkBalance(): void {
-    console.log(`Current Balance: Rs${this.balance}`);
+    console.log(`Your current balance is Rs${this.balance}`);
   }
 
-  printMiniStatement(startDate?: string, endDate?: string): void {
-    console.log("Mini Statement:");
-    this.transactions.forEach(tx => {
-      let date = tx.date.toLocaleString();
-      if (
-        (!startDate || tx.date >= new Date(startDate)) &&
-        (!endDate || tx.date <= new Date(endDate))
-      ) {
-        console.log(`${date} - ${tx.type} Rs${tx.amount}`);
-      }
-    });
+  // Show mini-statement
+  printMiniStatement(): void {
+    console.log("----- Mini Statement -----");
+    if (this.transactions.length === 0) {
+      console.log("No transactions yet.");
+    } else {
+      this.transactions.forEach((t, index) => {
+        console.log(`${index + 1}. ${t}`);
+      });
+    }
   }
 }
 
+
 const atm = new ATM(1234, 1000);
+
+// authenticating user
 if (atm.authenticate(1234)) {
+  atm.checkBalance();
   atm.deposit(500);
-  atm.withdraw(300);
+  atm.withdraw(200);
   atm.checkBalance();
   atm.printMiniStatement();
-} else {
-  console.log("Invalid PIN!");
 }
